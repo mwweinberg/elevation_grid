@@ -8,8 +8,10 @@ grid_x = 3
 grid_y = 3
 
 #make this easy by defining the upper left point, not the center
-start_lat = 40.765201
-start_lon = -74.092170
+#start_lat = 40.765201
+#start_lon = -74.092170
+start_lat = 87
+start_lon = -177
 
 #these are for the pixels in any given frame
 lat_increment = 0.2563275
@@ -88,6 +90,14 @@ while True:
     #shift the frame
     start_lat = start_lat + lat_frame_shift_increment
     start_lon = start_lon + lon_frame_shift_increment
+
+    #frame bounce
+    if (start_lat >= 89 or start_lat <= -89):
+        lat_frame_shift_increment = lat_frame_shift_increment * -1
+    if (start_lon >= 179 or start_lon < -179):
+        lon_frame_shift_increment = lon_frame_shift_increment * -1
+
+
 
     #reset the lists to clear out the old data
     lat_lon_matrix = []
