@@ -3,20 +3,22 @@ import time
 
 
 ######## Setup Section #############
+#let's start with a 5x5 grid
+grid_x = 3
+grid_y = 3
+
 #make this easy by defining the upper left point, not the center
 start_lat = 40.765201
 start_lon = -74.092170
 
-
-
+#these are for the pixels in any given frame
 lat_increment = 0.2563275
 lon_increment = 0.0128164
 
+#these are for shifting the entire frame
+lat_frame_shift_increment = 1
+lon_frame_shift_increment = 1
 
-
-#let's start with a 5x5 grid
-grid_x = 5
-grid_y = 5
 
 ######### Create the lat_lon matrix ##########
 
@@ -32,9 +34,9 @@ def create_lat_lon_matrix(input_lat, input_lon, input_lat_increment, input_lon_i
             point_lon = input_lon - (y * input_lon_increment)
             lat_lon_matrix.append([point_lat, point_lon])
 
-create_lat_lon_matrix(start_lat, start_lon, lat_increment, lon_increment, grid_x, grid_y)
+#create_lat_lon_matrix(start_lat, start_lon, lat_increment, lon_increment, grid_x, grid_y)
 
-print(lat_lon_matrix)
+#print(lat_lon_matrix)
 
 ######### Create the elevation matrix #########
 
@@ -57,21 +59,41 @@ def create_elevation_matrix(input_lat_lon_matrix):
         elevation_matrix.append(output_elevation_json["results"][0]["elevation"])
         #print just to track the progress
         print(output_elevation_json["results"][0]["elevation"])
-        #pause as per API rules 
+        #pause as per API rules
         time.sleep(1)
 
-create_elevation_matrix(lat_lon_matrix)
+#create_elevation_matrix(lat_lon_matrix)
 
-print(elevation_matrix)
+#print(elevation_matrix)
 
 
 
 
 #TODO: create color grid
-
 #TODO: convert elevation grid into color grid
 
 #TODO: shift grid over time
+
+while True:
+    #this is for debugging so you can find the frame
+    print("starting point: " + str(start_lat) + " , " + str(start_lon))
+
+    create_lat_lon_matrix(start_lat, start_lon, lat_increment, lon_increment, grid_x, grid_y)
+
+    create_elevation_matrix(lat_lon_matrix)
+    print(elevation_matrix)
+
+    #push colors
+
+    #shift the frame
+    start_lat = start_lat + lat_frame_shift_increment
+    start_lon = start_lon + lon_frame_shift_increment
+
+    #reset the lists to clear out the old data
+    lat_lon_matrix = []
+    elevation_matrix = []
+
+    time.sleep(20)
 
 #TODO: add bouncing to the shift so that it stays on earth
 
