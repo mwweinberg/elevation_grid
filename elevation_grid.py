@@ -1,5 +1,6 @@
 import requests
 import time
+import random
 
 
 ######## Setup Section #############
@@ -10,8 +11,8 @@ grid_y = 3
 #make this easy by defining the upper left point, not the center
 #start_lat = 40.765201
 #start_lon = -74.092170
-start_lat = 87
-start_lon = -177
+start_lat = 88
+start_lon = 177
 
 #these are for the pixels in any given frame
 lat_increment = 0.2563275
@@ -20,6 +21,11 @@ lon_increment = 0.0128164
 #these are for shifting the entire frame
 lat_frame_shift_increment = 1
 lon_frame_shift_increment = 1
+
+#these are to slightly randomize the frame shift when it bounces
+#this avoids just running the same path over and over
+frame_shift_random_lower_bound = -0.2
+frame_shift_random_upper_bound = 0.2
 
 
 ######### Create the lat_lon matrix ##########
@@ -91,11 +97,11 @@ while True:
     start_lat = start_lat + lat_frame_shift_increment
     start_lon = start_lon + lon_frame_shift_increment
 
-    #frame bounce
+    #frame bounce with a bit of randomization to keep things interesting
     if (start_lat >= 89 or start_lat <= -89):
-        lat_frame_shift_increment = lat_frame_shift_increment * -1
+        lat_frame_shift_increment = (lat_frame_shift_increment + random.uniform(frame_shift_random_lower_bound, frame_shift_random_upper_bound)) * -1
     if (start_lon >= 179 or start_lon < -179):
-        lon_frame_shift_increment = lon_frame_shift_increment * -1
+        lon_frame_shift_increment = (lon_frame_shift_increment + random.uniform(frame_shift_random_lower_bound, frame_shift_random_upper_bound)) * -1
 
 
 
@@ -104,8 +110,6 @@ while True:
     elevation_matrix = []
 
     time.sleep(20)
-
-#TODO: add bouncing to the shift so that it stays on earth
 
 #TODO: add way to arbitrarily change the starting point
 
