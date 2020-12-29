@@ -58,7 +58,7 @@ def create_elevation_matrix(input_lat_lon_matrix):
         #get the lon from the entry
         grid_lon = i[1]
         #generate the URL for the API
-        query_url = "https://api.opentopodata.org/v1/test-dataset?locations=" + str(grid_lat) + "," + str(grid_lon)
+        query_url = "http://localhost:5000/v1/etopo1?locations=" + str(grid_lat) + "," + str(grid_lon)
         #query the API with the URL
         r = requests.get(query_url)
         #get the json from the response
