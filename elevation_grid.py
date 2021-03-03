@@ -11,8 +11,8 @@ grid_y = 3
 #make this easy by defining the upper left point, not the center
 #start_lat = 40.765201
 #start_lon = -74.092170
-start_lat = 88
-start_lon = 177
+start_lat = 40
+start_lon = 75
 
 #these are for the pixels in any given frame
 lat_increment = 0.2563275
@@ -67,8 +67,8 @@ def create_elevation_matrix(input_lat_lon_matrix):
         elevation_matrix.append(output_elevation_json["results"][0]["elevation"])
         #print just to track the progress
         print(output_elevation_json["results"][0]["elevation"])
-        #pause as per API rules
-        time.sleep(1)
+        #pause as per API rules - you don't need this to be 1 any more if you self-host
+        time.sleep(.1)
 
 #create_elevation_matrix(lat_lon_matrix)
 
@@ -79,6 +79,44 @@ def create_elevation_matrix(input_lat_lon_matrix):
 
 #TODO: create color grid
 #TODO: convert elevation grid into color grid
+
+elevation_color_matrix = []
+
+def create_elevation_color_matrix(input_elevation_matrix):
+    # create the arduion map() function because apparently there isn't one in python?
+    def remap_values(x, in_min, in_max, out_min, out_max):
+        return int((x-in_min) * (out_max-out_min) / (in_max-in_min) + out_min)
+    list_min_value = min(input_elevation_matrix)
+    list_max_value = max(input_elevation_matrix)
+    list_mid_value = sum(input_elevation_matrix)/len(input_elevation_matrix)
+    print("list mid value = " + str(list_mid_value))
+    #get the range of elevations in the lat_lon_matrix (highest + lowest)
+    #for i in matrix:
+        #remap_values(i, matrix_min, matrix_max, 0, 255)
+
+    for i in input_elevation_matrix:
+        # i will just be the elevation
+
+        # if elevation is below sea level
+        if i <=0:
+            #only change the B value
+            elevation_color_matrix.append([0, 0, remap_values(i, list_min_value, list_max_value, 0, 255)])
+            print("underwater")
+        # if the elevation is above sea level
+        else:
+            #the goal here is to start increasing the R value and then spill over to the G value
+            #if i is less than half of the maximum height
+            if i <= list_mid_value:
+                #only increase the R value
+                elevation_color_matrix.append([remap_values(i, list_min_value, list_max_value, 0, 255), 0, 0])
+                print("above water and less than half of max grid height")
+            else:
+                #max out R and increase G value
+                # the G value maps the amount of i above the mid point to between zero and the difference between the max_value and the mid_value, which is the number space that I am reserving for G
+                elevation_color_matrix.append([255, remap_values((i-list_mid_value), 0, (list_max_value - list_mid_value), 0, 255), 0])
+                print("above water and more than half of max grid height")
+
+
 
 #TODO: shift grid over time
 
@@ -92,6 +130,8 @@ while True:
     print(elevation_matrix)
 
     #push colors
+    create_elevation_color_matrix(elevation_matrix)
+    print(elevation_color_matrix)
 
     #shift the frame
     start_lat = start_lat + lat_frame_shift_increment
@@ -108,8 +148,8 @@ while True:
     #reset the lists to clear out the old data
     lat_lon_matrix = []
     elevation_matrix = []
+    elevation_color_matrix = []
 
     time.sleep(20)
 
 #TODO: add way to arbitrarily change the starting point
-
