@@ -1,0 +1,11 @@
+# local notes / credentials
+config_info.md
+
+# elevation data (466 MB GeoTIFF) and old server checkouts — see readme History
+opentopodata/
+open-elevation/
+
+# python
+__pycache__/
+venv/
+world_map_cache.npy
