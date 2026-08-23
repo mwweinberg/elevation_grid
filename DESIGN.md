@@ -3,7 +3,7 @@
 Written August 2026 when the project was picked back up after stalling in
 September 2023. This records the state of the project, the reasoning behind
 the rewrite, and the decisions that were made (and the ones still open).
-`readme.md` tells you how to run it; this file tells you why it looks the
+`README.md` tells you how to run it; this file tells you why it looks the
 way it does.
 
 ## 1. The goal

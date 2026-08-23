@@ -141,7 +141,7 @@ From the **laptop**:
 
     cd ~/Documents/programming/python/elevation_grid
     ssh pi@elevationgrid.local mkdir -p elevation_grid
-    rsync -avP elevation_window.py readme.md DESIGN.md pi_install_instructions.md \
+    rsync -avP elevation_window.py README.md DESIGN.md pi_install_instructions.md \
         pi@elevationgrid.local:elevation_grid/
     rsync -avP --relative opentopodata/data/etopo1/ETOPO1.tif \
         pi@elevationgrid.local:elevation_grid/
@@ -271,7 +271,7 @@ normal port: **http://elevationgrid.local/**.
 
 Look at it for a while and adjust the constants at the top of
 `elevation_window.py` (`DEG_PER_PIXEL`, `STEP_DEG`, `MAX_BRIGHTNESS`,
-colours in `elevation_to_rgb`) — see `readme.md` for what each does. Edit on
+colours in `elevation_to_rgb`) — see `README.md` for what each does. Edit on
 the Pi with `nano`, or edit on the laptop and re-run the first `rsync` from
 step 4.
 
