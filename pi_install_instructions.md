@@ -3,7 +3,7 @@
 Start-to-finish instructions: blank SD card to a panel that starts on boot.
 Written for a Pi 3 Model B (v1.2) running Raspberry Pi OS Lite 32-bit
 (Trixie, Aug 2026) with the Adafruit RGB Matrix + RTC HAT
-(product 3920) and a 16x32 HUB75 panel, developed from a Linux laptop over
+(product 2345) and a 16x32 HUB75 panel, developed from a Linux laptop over
 SSH. Notes for other boards are marked.
 
 Rough time: 30-45 minutes, most of it waiting for `apt` and the matrix

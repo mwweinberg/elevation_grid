@@ -1,9 +1,16 @@
 # Elevation window
 
-A 32x16 RGB LED matrix (Adafruit RGB Matrix + RTC HAT, product 3920) that acts
+A 32x16 RGB LED matrix (Adafruit RGB Matrix + RTC HAT, product 2345) that acts
 as a window drifting slowly across the world, showing the elevation of whatever
 rectangle of the planet it is currently over. Ocean is blue (brighter = shallower),
 land goes dim red -> red -> yellow with height.
+
+Hardware:
+
+- [Adafruit RGB Matrix HAT + RTC for Raspberry Pi](https://www.adafruit.com/product/2345)
+- [16x32 RGB LED matrix panel, 6 mm pitch](https://www.adafruit.com/product/420)
+- Raspberry Pi 3 Model B (any 40-pin Pi that isn't a Pi 5 works)
+- 5 V power supply, 2 A or more
 
 The script is `elevation_window.py`. Everything else in this folder is history
 (see the bottom of this file). For the reasoning behind the design, the

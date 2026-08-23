@@ -9,7 +9,7 @@ way it does.
 ## 1. The goal
 
 A 32-wide by 16-tall RGB LED matrix, driven by a Raspberry Pi with the
-Adafruit RGB Matrix + Real Time Clock HAT (product 3920), acts as a window
+Adafruit RGB Matrix + Real Time Clock HAT (product 2345), acts as a window
 that drifts slowly across the world. Each LED shows the elevation of one point
 of the rectangle of Earth currently under the window. A possible v2 adds a
 small e-paper display with a world map and a marker for the window's position.
