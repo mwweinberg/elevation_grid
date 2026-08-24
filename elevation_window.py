@@ -56,7 +56,7 @@ MAX_BRIGHTNESS = 200
 
 # hardware brightness of the LED panel, 1-100. Dims via PWM so colours keep
 # their full resolution; does not affect the web page.
-PANEL_BRIGHTNESS = 80
+PANEL_BRIGHTNESS = 70
 
 # land colour scheme:
 #   "map"  - hypsometric tints like a paper map: green lowlands, yellow/amber
