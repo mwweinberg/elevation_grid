@@ -62,8 +62,8 @@ PALETTE = "map"
 
 # colour stops for the "map" palette as (fraction of frame relief, (r, g, b))
 MAP_STOPS = [
-    (0.00, (40, 150, 50)),     # lowland green
-    (0.25, (150, 190, 60)),    # yellow-green
+    (0.00, (15, 110, 25)),     # lowland green (deep, low red/blue = richer)
+    (0.25, (120, 170, 40)),    # yellow-green
     (0.45, (220, 190, 70)),    # tan / yellow
     (0.65, (200, 120, 40)),    # amber-brown
     (0.85, (170, 90, 60)),     # brown
