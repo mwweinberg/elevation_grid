@@ -54,6 +54,10 @@ MIN_SPAN_M = 300
 # nudge brightness down when driving the panel; 255 everywhere is blinding
 MAX_BRIGHTNESS = 200
 
+# hardware brightness of the LED panel, 1-100. Dims via PWM so colours keep
+# their full resolution; does not affect the web page.
+PANEL_BRIGHTNESS = 80
+
 # land colour scheme:
 #   "map"  - hypsometric tints like a paper map: green lowlands, yellow/amber
 #            middle ground, orange-brown high ground, white peaks
@@ -195,6 +199,7 @@ class MatrixDisplay:
         opts.cols = COLS
         opts.hardware_mapping = mapping
         opts.gpio_slowdown = slowdown
+        opts.brightness = PANEL_BRIGHTNESS
         opts.drop_privileges = False
         self.matrix = RGBMatrix(options=opts)
         self.canvas = self.matrix.CreateFrameCanvas()

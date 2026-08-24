@@ -90,6 +90,8 @@ command is enough.
 - `MIN_SPAN_M` – minimum relief the colour scale is stretched over, so a flat
   frame doesn't turn into noise.
 - `MAX_BRIGHTNESS` – full-white LEDs are blinding indoors.
+- `PANEL_BRIGHTNESS` – hardware dimming of the panel (1-100), without
+  changing the colours themselves.
 - `PANEL_FLIP_VERTICAL` / `PANEL_FLIP_HORIZONTAL` – physical panel orientation
   (the web page is always north-up; match the panel to it).
 - `PALETTE` – `"map"` (green lowlands → tan → brown → white peaks, like a
