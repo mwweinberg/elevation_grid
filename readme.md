@@ -1,19 +1,6 @@
-This is a project to display a slowly drifting representation of the earth's surface's elevation.  Think of it as a tiny window into the elevation of a rectangle drawn on the surface of the earth.
-
-The window is displayed on a [16x32 LED matrix](https://www.adafruit.com/product/420) 
-and driven by a pi using an [Adafruit hat](https://www.adafruit.com/product/2345).  The elevation will be displayed on the display itself:
-
-<p align="center"><img src="images/grid.jpg" width="80%" alt="The LED grid"></p>
-
-and also on a webpage you can access on the local network.
-
-<p align="center"><img src="images/website_preview.png" width="80%" alt="Screenshot of a website showing the LED review and a rendering of the earth with a box showing what is being displayed."></p>
-
-
-
 # Elevation window
 
-A 32x16 RGB LED matrix (Adafruit RGB Matrix + RTC HAT, product 2345) that acts
+A 32x16 RGB LED matrix (Adafruit RGB Matrix + RTC HAT, product 3920) that acts
 as a window drifting slowly across the world, showing the elevation of whatever
 rectangle of the planet it is currently over. Ocean is blue (brighter = shallower),
 land goes dim red -> red -> yellow with height.
@@ -35,20 +22,10 @@ Output goes to the panel through hzeller's `rpi-rgb-led-matrix` Python bindings.
 If that library isn't importable (e.g. you're on a laptop) the frame is drawn in
 the terminal with ANSI colours instead, so you can develop anywhere.
 
-The script also serves a small web page (port 80 on the Pi, so
-`http://elevationgrid.local/` if the Pi is named `elevationgrid`) that mirrors
-the panel live, shows the window's position on a world map, and draws a trail
-of where it has been. The map is generated from ETOPO1 with the same colour
-scheme as the panel and cached in `world_map_cache.npy` on first run. The page
-polls once per `--interval`; there are no controls. `--no-web` disables it,
-`--web-port 8080` lets it run without root on a laptop.
-
 ## Running on a laptop
 
     python3 -m venv venv && ./venv/bin/pip install rasterio numpy
-    ./venv/bin/python elevation_window.py --interval 0.2 --start 27.9,86.9 --web-port 8080
-
-then open http://localhost:8080/ for the web view.
+    ./venv/bin/python elevation_window.py --interval 0.2 --start 27.9,86.9
 
 ## Running on the Pi
 
@@ -90,16 +67,9 @@ command is enough.
 - `MIN_SPAN_M` – minimum relief the colour scale is stretched over, so a flat
   frame doesn't turn into noise.
 - `MAX_BRIGHTNESS` – full-white LEDs are blinding indoors.
-- `PANEL_FLIP_VERTICAL` / `PANEL_FLIP_HORIZONTAL` – physical panel orientation
-  (the web page is always north-up; match the panel to it).
-- `PALETTE` – `"map"` (green lowlands → tan → brown → white peaks, like a
-  paper map; stops in `MAP_STOPS`) or `"fire"` (the original red → yellow).
-  Note an LED can't really be brown: on a black background the brown stops
-  read as amber. Adjust `MAP_STOPS` to taste.
 - Colours live in `elevation_to_rgb()`. The scale is anchored at sea level and
   adapts to each frame's max height/depth; swap in fixed constants there if you
   prefer stable colours over per-frame contrast.
-- `TRAIL_LEN` – how many past positions the web page's trail keeps.
 - `--start lat,lon` and `--heading` set where the window begins and which way
   it drifts. Longitude wraps across the date line; latitude bounces off the
   poles with a little random jitter so the path doesn't repeat.
@@ -107,10 +77,8 @@ command is enough.
 ## Ideas / v2
 
 - Small e-paper display showing a world map with a dot/box for the window's
-  current position. The web page already does this on screen; the e-paper
-  version can reuse `ElevationRaster.world_map()` and the trail. Check which
-  GPIO pins the matrix HAT leaves free before buying one (SPI displays may
-  conflict).
+  current position. Check which GPIO pins the matrix HAT leaves free before
+  buying one (SPI displays may conflict).
 - The HAT's RTC is currently unused; it could seed the start position from the
   date, or drive a "sunlight" tint.
 

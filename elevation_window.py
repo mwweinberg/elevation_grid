@@ -54,6 +54,22 @@ MIN_SPAN_M = 300
 # nudge brightness down when driving the panel; 255 everywhere is blinding
 MAX_BRIGHTNESS = 200
 
+# land colour scheme:
+#   "map"  - hypsometric tints like a paper map: green lowlands, yellow/amber
+#            middle ground, orange-brown high ground, white peaks
+#   "fire" - the original: dim red -> red -> yellow
+PALETTE = "map"
+
+# colour stops for the "map" palette as (fraction of frame relief, (r, g, b))
+MAP_STOPS = [
+    (0.00, (40, 150, 50)),     # lowland green
+    (0.25, (150, 190, 60)),    # yellow-green
+    (0.45, (220, 190, 70)),    # tan / yellow
+    (0.65, (200, 120, 40)),    # amber-brown
+    (0.85, (170, 90, 60)),     # brown
+    (1.00, (255, 255, 255)),   # snowy peaks
+]
+
 # physical panel orientation: flip so north is at the top. Only affects the
 # LED panel; the web page is always drawn north-up.
 PANEL_FLIP_VERTICAL = True
@@ -122,12 +138,22 @@ class ElevationRaster:
 
 ######### Elevation -> colour #########
 
+def _interp_stops(t, stops):
+    """Piecewise-linear colour ramp: t in 0..1 (array) -> (..., 3) floats."""
+    xs = np.array([x for x, _ in stops])
+    cols = np.array([c for _, c in stops], dtype=float)
+    out = np.empty(t.shape + (3,))
+    for ch in range(3):
+        out[..., ch] = np.interp(t, xs, cols[:, ch])
+    return out
+
+
 def elevation_to_rgb(elev, brightness=MAX_BRIGHTNESS):
     """
     Map an elevation array to an (..., 3) uint8 array.
     Sea level is a fixed anchor; the scale above/below it adapts to the frame.
       below 0 : deep blue -> bright blue as it shallows
-      above 0 : dim red -> full red -> yellow at the frame's highest point
+      above 0 : depends on PALETTE (see top of file)
     """
     rgb = np.zeros(elev.shape + (3,), dtype=np.uint8)
     land = elev > 0
@@ -143,10 +169,13 @@ def elevation_to_rgb(elev, brightness=MAX_BRIGHTNESS):
         h = elev[land].astype(float)
         span = max(h.max(), MIN_SPAN_M)
         t = h / span                            # 0..1 across the frame's relief
-        r = 60 + np.minimum(t * 2, 1.0) * 195   # first half: red climbs
-        g = np.clip((t - 0.5) * 2, 0, 1) * 255  # second half: green spills in
-        rgb[land, 0] = r.astype(np.uint8)
-        rgb[land, 1] = g.astype(np.uint8)
+        if PALETTE == "map":
+            rgb[land] = _interp_stops(t, MAP_STOPS).astype(np.uint8)
+        else:
+            r = 60 + np.minimum(t * 2, 1.0) * 195   # first half: red climbs
+            g = np.clip((t - 0.5) * 2, 0, 1) * 255  # second half: green spills in
+            rgb[land, 0] = r.astype(np.uint8)
+            rgb[land, 1] = g.astype(np.uint8)
 
     return (rgb.astype(np.uint16) * brightness // 255).astype(np.uint8)
 
